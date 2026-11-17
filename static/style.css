@@ -910,22 +910,22 @@ button.nav-link {
 
 .add-fab {
     position: fixed;
-    right: 28px;
-    bottom: 28px;
+    right: 20px;
+    bottom: 20px;
     z-index: 60;
-    width: 58px;
-    height: 58px;
+    width: 38px;
+    height: 38px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 50%;
     color: #fff;
-    background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.3), transparent 55%),
+    background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.35), transparent 55%),
         linear-gradient(135deg, var(--primary), var(--secondary));
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4),
-        inset 0 -3px 8px rgba(15, 23, 42, 0.16),
-        0 16px 32px -8px rgba(8, 145, 178, 0.65),
-        0 0 0 5px rgba(255, 255, 255, 0.88);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -2px 5px rgba(15, 23, 42, 0.16),
+        0 9px 18px -6px rgba(8, 145, 178, 0.6),
+        0 0 0 3px rgba(255, 255, 255, 0.9);
     cursor: pointer;
     transition: transform var(--transition), box-shadow var(--transition),
         filter var(--transition);
@@ -935,9 +935,9 @@ button.nav-link {
 .add-fab::before {
     content: '';
     position: absolute;
-    inset: -7px;
+    inset: -4px;
     border-radius: 50%;
-    border: 1.5px solid rgba(8, 145, 178, 0.3);
+    border: 1px solid rgba(8, 145, 178, 0.3);
     animation: fab-pulse 2.8s ease-out infinite;
 }
 
@@ -951,12 +951,12 @@ button.nav-link {
 .add-fab::after {
     content: 'Add new';
     position: absolute;
-    right: calc(100% + 14px);
-    padding: 7px 12px;
+    right: calc(100% + 9px);
+    padding: 5px 9px;
     border-radius: 999px;
     background: var(--text);
     color: #fff;
-    font-size: 0.74rem;
+    font-size: 0.66rem;
     font-weight: 700;
     white-space: nowrap;
     opacity: 0;
@@ -966,12 +966,12 @@ button.nav-link {
 }
 
 .add-fab:hover {
-    transform: translateY(-4px) scale(1.06);
+    transform: translateY(-2px) scale(1.05);
     filter: brightness(1.07) saturate(1.08);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5),
-        inset 0 -3px 8px rgba(15, 23, 42, 0.12),
-        0 22px 40px -8px rgba(8, 145, 178, 0.75),
-        0 0 0 6px rgba(255, 255, 255, 0.95);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55),
+        inset 0 -2px 5px rgba(15, 23, 42, 0.1),
+        0 13px 24px -7px rgba(8, 145, 178, 0.75),
+        0 0 0 4px rgba(255, 255, 255, 0.95);
 }
 
 .add-fab:hover::after {
@@ -984,32 +984,32 @@ button.nav-link {
 }
 
 .add-fab:active {
-    transform: translateY(-1px) scale(0.96);
+    transform: translateY(0) scale(0.95);
 }
 
 .add-fab svg {
-    width: 26px;
-    height: 26px;
+    width: 17px;
+    height: 17px;
     filter: drop-shadow(0 1px 2px rgba(15, 23, 42, 0.28));
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .add-modal {
-    width: min(940px, calc(100vw - 32px));
-    max-height: min(86vh, 780px);
+    width: min(460px, calc(100vw - 28px));
+    max-height: min(72vh, 560px);
     overflow-y: auto;
-    padding: 26px 28px 30px;
+    padding: 20px 22px 22px;
     color: var(--text);
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
+    border-radius: 16px;
     box-shadow: var(--shadow-lg);
 }
 
 .add-modal::backdrop {
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.35);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 .add-modal[open] {
@@ -1032,22 +1032,23 @@ button.nav-link {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 22px;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
 .modal-head h2 {
-    margin-bottom: 4px;
+    margin-bottom: 3px;
+    font-size: 1.08rem;
 }
 
 .modal-head p {
     color: var(--text-muted);
-    font-size: 0.84rem;
+    font-size: 0.76rem;
 }
 
 .modal-close {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
@@ -1068,8 +1069,8 @@ button.nav-link {
 }
 
 .modal-close svg {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
 }
 
 .add-grid {
@@ -1097,13 +1098,13 @@ button.nav-link {
 .add-card-head {
     display: flex;
     align-items: flex-start;
-    gap: 13px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .add-card-icon {
-    width: 42px;
-    height: 42px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
@@ -1118,39 +1119,39 @@ button.nav-link {
 }
 
 .add-card-icon svg {
-    width: 21px;
-    height: 21px;
+    width: 16px;
+    height: 16px;
 }
 
 .add-card h3 {
-    font-size: 1.02rem;
+    font-size: 0.94rem;
     font-weight: 700;
     color: var(--text);
 }
 
 .add-card-head p {
-    margin-top: 3px;
+    margin-top: 2px;
     color: var(--text-muted);
-    font-size: 0.8rem;
-    line-height: 1.5;
+    font-size: 0.72rem;
+    line-height: 1.45;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-bottom: 18px;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .form-field {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 5px;
     min-width: 0;
 }
 
 .form-field label {
-    font-size: 0.72rem;
+    font-size: 0.65rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1159,13 +1160,13 @@ button.nav-link {
 
 .form-field input {
     width: 100%;
-    padding: 11px 14px;
+    padding: 8px 10px;
     font: inherit;
-    font-size: 0.88rem;
+    font-size: 0.82rem;
     color: var(--text);
     background: var(--surface-soft);
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     transition: border-color var(--transition), box-shadow var(--transition),
         background var(--transition);
 }
@@ -1181,8 +1182,194 @@ button.nav-link {
     box-shadow: var(--ring);
 }
 
+.form-field.wide {
+    grid-column: 1 / -1;
+}
+
+.form-field input[type='number'],
+.form-field input[type='date'] {
+    font-variant-numeric: tabular-nums;
+}
+
+.form-field input[type='date'] {
+    color-scheme: light;
+}
+
 .add-card .btn-primary {
     width: 100%;
+}
+
+.add-modal .btn-primary {
+    width: auto;
+    align-self: flex-end;
+    gap: 6px;
+    padding: 7px 12px;
+    font-size: 0.76rem;
+    border-radius: 8px;
+}
+
+.add-modal .btn-primary svg {
+    width: 13px;
+    height: 13px;
+}
+
+/* The single form blends into the popup instead of looking like a nested card */
+.add-modal > .add-card {
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.add-modal > .add-card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ==========================================================================
+   HOSPITAL MANAGEMENT (EDIT / DELETE)
+   ========================================================================== */
+
+.section-intro {
+    margin-top: 4px;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
+
+.section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.count-pill {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    color: var(--primary-dark);
+    background: var(--primary-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.table-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 8px;
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: color var(--transition), background var(--transition),
+        border-color var(--transition), transform var(--transition);
+}
+
+.table-action svg {
+    width: 12px;
+    height: 12px;
+}
+
+.row-dash {
+    color: var(--text-faint);
+    font-size: 0.85rem;
+}
+
+.table-action:hover {
+    transform: translateY(-1px);
+}
+
+.table-action.edit:hover {
+    color: var(--primary-dark);
+    background: var(--primary-soft);
+    border-color: #a5e7f2;
+}
+
+.table-action.delete:hover {
+    color: var(--danger);
+    background: var(--danger-soft);
+    border-color: #fecaca;
+}
+
+.empty-row {
+    padding: 22px !important;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.compact-modal {
+    width: min(420px, calc(100vw - 28px));
+}
+
+.confirm-modal {
+    width: min(380px, calc(100vw - 28px));
+}
+
+.confirm-text {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    line-height: 1.6;
+}
+
+.confirm-text strong {
+    color: var(--text);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn-ghost,
+.btn-danger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 13px;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background var(--transition), border-color var(--transition),
+        color var(--transition), filter var(--transition);
+}
+
+.btn-ghost {
+    color: var(--text-muted);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+    color: var(--text);
+    border-color: #cbd5e1;
+}
+
+.btn-danger {
+    color: #fff;
+    background: var(--danger);
+    border: 1px solid var(--danger);
+    box-shadow: 0 6px 16px -6px rgba(220, 38, 38, 0.6);
+}
+
+.btn-danger:hover {
+    filter: brightness(1.06);
 }
 
 /* ==========================================================================
@@ -1362,14 +1549,27 @@ button.nav-link {
     }
 
     .add-modal {
-        padding: 20px;
+        width: calc(100vw - 20px);
+        padding: 16px;
     }
 
     .add-fab {
-        right: 18px;
-        bottom: 18px;
-        width: 52px;
-        height: 52px;
+        right: 14px;
+        bottom: 14px;
+        width: 34px;
+        height: 34px;
+    }
+
+    .section-head {
+        flex-direction: column;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions button {
+        width: 100%;
     }
 
     .live-pill {

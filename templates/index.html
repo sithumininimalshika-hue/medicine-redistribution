@@ -57,6 +57,12 @@
             </svg>
             Add New
           </button>
+          <a class="nav-link" href="#hospitals">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+            </svg>
+            Hospitals
+          </a>
           <a class="nav-link" href="#summary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
@@ -158,8 +164,8 @@
       <dialog id="addModal" class="add-modal" aria-labelledby="addModalTitle">
         <div class="modal-head">
           <div>
-            <h2 id="addModalTitle">Add Hospital or Medicine</h2>
-            <p>Register a new facility or medicine in the monitoring network.</p>
+            <h2 id="addModalTitle">Add Hospital with Stock</h2>
+            <p>Register a new facility with its medicine stock and expiry date.</p>
           </div>
 
           <button type="button" class="modal-close" data-close-add aria-label="Close popup">
@@ -169,118 +175,249 @@
           </button>
         </div>
 
-        <div class="add-grid">
-          <form
-            class="add-card"
-            action="{{ url_for('add_hospital_route') }}"
-            method="POST"
-          >
-            <div class="add-card-head">
-              <span class="add-card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
-                </svg>
-              </span>
-              <div>
-                <h3>Add Hospital</h3>
-                <p>Zero-stock records are created for every existing medicine.</p>
-              </div>
-            </div>
-
-            <div class="form-grid">
-              <div class="form-field">
-                <label for="hospitalName">Hospital Name</label>
-                <input
-                  id="hospitalName"
-                  type="text"
-                  name="name"
-                  placeholder="e.g. North Hospital"
-                  maxlength="120"
-                  required
-                />
-              </div>
-
-              <div class="form-field">
-                <label for="hospitalLocation">Location</label>
-                <input
-                  id="hospitalLocation"
-                  type="text"
-                  name="location"
-                  placeholder="e.g. Jaffna"
-                  maxlength="120"
-                  required
-                />
-              </div>
-            </div>
-
-            <button type="submit" class="btn-primary">
+        <form
+          class="add-card"
+          action="{{ url_for('add_hospital_route') }}"
+          method="POST"
+        >
+          <div class="add-card-head">
+            <span class="add-card-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12h14" />
+                <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
               </svg>
-              Add Hospital
-            </button>
-          </form>
+            </span>
+            <div>
+              <h3>Hospital Details</h3>
+              <p>Choose an existing medicine or type a new name to create one.</p>
+            </div>
+          </div>
 
-          <form
-            class="add-card"
-            action="{{ url_for('add_medicine_route') }}"
-            method="POST"
-          >
-            <div class="add-card-head">
-              <span class="add-card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M10.5 20.5 19 12a2.828 2.828 0 0 0-4-4l-8.5 8.5a4.243 4.243 0 0 0 6 6Z" />
-                  <path d="m16 8 3-3a2.828 2.828 0 0 1 4 4l-3 3" />
-                </svg>
-              </span>
-              <div>
-                <h3>Add Medicine</h3>
-                <p>Zero-stock records are created for every existing hospital.</p>
-              </div>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="hospitalName">Hospital Name</label>
+              <input
+                id="hospitalName"
+                type="text"
+                name="name"
+                placeholder="e.g. North Hospital"
+                maxlength="120"
+                required
+              />
             </div>
 
-            <div class="form-grid">
-              <div class="form-field">
-                <label for="medicineName">Medicine Name</label>
-                <input
-                  id="medicineName"
-                  type="text"
-                  name="name"
-                  placeholder="e.g. Vitamin C"
-                  maxlength="120"
-                  required
-                />
-              </div>
-
-              <div class="form-field">
-                <label for="medicineCategory">Category</label>
-                <input
-                  id="medicineCategory"
-                  type="text"
-                  name="category"
-                  placeholder="e.g. Supplement"
-                  maxlength="120"
-                  required
-                />
-              </div>
+            <div class="form-field">
+              <label for="hospitalLocation">Location</label>
+              <input
+                id="hospitalLocation"
+                type="text"
+                name="location"
+                placeholder="e.g. Jaffna"
+                maxlength="120"
+                required
+              />
             </div>
 
-            <button type="submit" class="btn-primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-              Add Medicine
-            </button>
-          </form>
-        </div>
+            <div class="form-field">
+              <label for="medicineName">Medicine</label>
+              <input
+                id="medicineName"
+                type="text"
+                name="medicine"
+                list="medicineOptions"
+                placeholder="e.g. Paracetamol"
+                maxlength="120"
+                required
+              />
+              <datalist id="medicineOptions">
+                {% for name in medicine_names %}
+                <option value="{{ name }}"></option>
+                {% endfor %}
+              </datalist>
+            </div>
+
+            <div class="form-field">
+              <label for="stockQuantity">Current Stock</label>
+              <input
+                id="stockQuantity"
+                type="number"
+                name="quantity"
+                min="0"
+                step="1"
+                placeholder="e.g. 250"
+                required
+              />
+            </div>
+
+            <div class="form-field wide">
+              <label for="expiryDate">Expiry Date</label>
+              <input
+                id="expiryDate"
+                type="date"
+                name="expiry_date"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Add Hospital with Stock
+          </button>
+        </form>
       </dialog>
 
       <!-- Floating + button -->
-      <button type="button" class="add-fab" data-add-trigger aria-label="Add hospital or medicine">
+      <button type="button" class="add-fab" data-add-trigger aria-label="Add hospital with stock">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 5v14M5 12h14" />
         </svg>
       </button>
+
+      <!-- Hospital Management -->
+      <section class="panel" id="hospitals">
+        <div class="section-head">
+          <div>
+            <h2>Hospitals</h2>
+            <p class="section-intro">
+              Edit hospital details or remove a hospital and its stock records.
+            </p>
+          </div>
+          <span class="count-pill">{{ hospitals|length }} registered</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Location</th>
+                <th>Stock Records</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for hospital in hospitals %}
+              <tr>
+                <td><strong>{{ hospital.name }}</strong></td>
+                <td>{{ hospital.location }}</td>
+                <td>{{ hospital.stock_records }}</td>
+                <td>
+                  <div class="table-actions">
+                    <button
+                      type="button"
+                      class="table-action edit"
+                      data-hospital-id="{{ hospital.id }}"
+                      data-hospital-name="{{ hospital.name }}"
+                      data-hospital-location="{{ hospital.location }}"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                      </svg>
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      class="table-action delete"
+                      data-hospital-id="{{ hospital.id }}"
+                      data-hospital-name="{{ hospital.name }}"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6M14 11v6" />
+                      </svg>
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              {% else %}
+              <tr>
+                <td colspan="4" class="empty-row">No hospitals registered yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Edit Hospital Popup -->
+      <dialog id="editHospitalModal" class="add-modal compact-modal" aria-labelledby="editHospitalTitle">
+        <div class="modal-head">
+          <div>
+            <h2 id="editHospitalTitle">Edit Hospital</h2>
+            <p>Update the name or location of this facility.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-dialog aria-label="Close popup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form action="{{ url_for('edit_hospital_route') }}" method="POST">
+          <input type="hidden" name="hospital_id" id="editHospitalId" />
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="editHospitalName">Hospital Name</label>
+              <input
+                id="editHospitalName"
+                type="text"
+                name="name"
+                maxlength="120"
+                required
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="editHospitalLocation">Location</label>
+              <input
+                id="editHospitalLocation"
+                type="text"
+                name="location"
+                maxlength="120"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-ghost" data-close-dialog>Cancel</button>
+            <button type="submit" class="btn-primary">Save changes</button>
+          </div>
+        </form>
+      </dialog>
+
+      <!-- Delete Hospital Popup -->
+      <dialog id="deleteHospitalModal" class="add-modal compact-modal confirm-modal" aria-labelledby="deleteHospitalTitle">
+        <div class="modal-head">
+          <div>
+            <h2 id="deleteHospitalTitle">Delete Hospital</h2>
+            <p>This action cannot be undone.</p>
+          </div>
+          <button type="button" class="modal-close" data-close-dialog aria-label="Close popup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form action="{{ url_for('delete_hospital_route') }}" method="POST">
+          <input type="hidden" name="hospital_id" id="deleteHospitalId" />
+
+          <p class="confirm-text">
+            Delete <strong id="deleteHospitalName"></strong>? Its stock records
+            and consumption history will also be removed.
+          </p>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-ghost" data-close-dialog>Cancel</button>
+            <button type="submit" class="btn-danger">Delete hospital</button>
+          </div>
+        </form>
+      </dialog>
 
       <!-- Dashboard Summary -->
       <section class="summary" id="summary">
@@ -353,10 +490,12 @@
                 <th>Daily Usage</th>
                 <th>Days Remaining</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
 
             <tbody>
+              {% set ns = namespace(last_hospital=none) %}
               {% for item in stock_data %}
               <tr>
                 <td>{{ item.hospital }}</td>
@@ -385,6 +524,42 @@
                   <span class="status-badge {{ item.status|lower|replace(' ', '-') }}">
                     {{ item.status }}
                   </span>
+                </td>
+
+                <td>
+                  {% if item.hospital != ns.last_hospital %}
+                    {% set info = hospital_lookup.get(item.hospital) %}
+                    {% if info %}
+                    <div class="table-actions">
+                      <button
+                        type="button"
+                        class="table-action edit"
+                        data-hospital-id="{{ info.id }}"
+                        data-hospital-name="{{ item.hospital }}"
+                        data-hospital-location="{{ info.location }}"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M12 20h9" /><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg>
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        class="table-action delete"
+                        data-hospital-id="{{ info.id }}"
+                        data-hospital-name="{{ item.hospital }}"
+                      >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M3 6h18" /><path d="M8 6V4h8v2" /><path d="M19 6l-1 14H6L5 6" /><path d="M10 11v6M14 11v6" />
+                        </svg>
+                        Delete
+                      </button>
+                    </div>
+                    {% set ns.last_hospital = item.hospital %}
+                    {% endif %}
+                  {% else %}
+                    <span class="row-dash">—</span>
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}
@@ -684,9 +859,54 @@
     });
   }
 
+  // Hospital edit/delete popups
+  const editHospitalModal = document.getElementById("editHospitalModal");
+  const deleteHospitalModal = document.getElementById("deleteHospitalModal");
+  const manageModals = [editHospitalModal, deleteHospitalModal].filter(Boolean);
+
+  manageModals.forEach((modal) => {
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.close();
+      }
+    });
+
+    modal.querySelectorAll("[data-close-dialog]").forEach((button) => {
+      button.addEventListener("click", () => modal.close());
+    });
+  });
+
+  document.querySelectorAll(".table-action.edit").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!editHospitalModal) return;
+
+      document.getElementById("editHospitalId").value =
+        button.dataset.hospitalId;
+      document.getElementById("editHospitalName").value =
+        button.dataset.hospitalName;
+      document.getElementById("editHospitalLocation").value =
+        button.dataset.hospitalLocation;
+
+      editHospitalModal.showModal();
+    });
+  });
+
+  document.querySelectorAll(".table-action.delete").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!deleteHospitalModal) return;
+
+      document.getElementById("deleteHospitalId").value =
+        button.dataset.hospitalId;
+      document.getElementById("deleteHospitalName").textContent =
+        button.dataset.hospitalName;
+
+      deleteHospitalModal.showModal();
+    });
+  });
+
   // Reopen the popup after a failed submission, or from the search page link
   const query = new URLSearchParams(window.location.search);
-  if (query.has("open_add") || query.get("add_success") === "0") {
+  if (query.has("open_add")) {
     openAddModal();
   }
 
