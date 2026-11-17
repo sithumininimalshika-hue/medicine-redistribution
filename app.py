@@ -1,4 +1,5 @@
 
+
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
@@ -14,13 +15,31 @@ app = Flask(__name__)
 @app.route("/")
 def home():
 
+    # Analyze stock
     stock_data = analyze_stock()
 
+    # Prepare chart data
+    chart_data = {}
+
+    for item in stock_data:
+        medicine = item["medicine"]
+
+        if medicine not in chart_data:
+            chart_data[medicine] = []
+
+        chart_data[medicine].append({
+            "hospital": item["hospital"],
+            "quantity": item["quantity"]
+        })
+
+    # Generate recommendations
     recommendations = generate_recommendations()
 
+    # Analyze consumption and expiry
     consumption_data = analyze_consumption()
     expiry_data = analyze_expiry()
 
+    # Dashboard statistics
     total_hospitals = 3
     total_medicines = 5
 
@@ -43,7 +62,8 @@ def home():
         total_hospitals=total_hospitals,
         total_medicines=total_medicines,
         critical_count=critical_count,
-        low_count=low_count
+        low_count=low_count,
+        chart_data=chart_data
     )
 
 
@@ -56,6 +76,10 @@ def approve_transfer_route():
 
     try:
         quantity = int(request.form.get("quantity", 0))
+
+        if quantity <= 0:
+            raise ValueError
+
     except (ValueError, TypeError):
         return redirect(url_for(
             "home",
@@ -76,6 +100,7 @@ def approve_transfer_route():
         transfer_success=int(success)
     ))
 
+
 @app.route("/search", methods=["GET"])
 def search_medicine():
 
@@ -86,42 +111,46 @@ def search_medicine():
     if medicine_name:
 
         connection = sqlite3.connect("database/medicine.db")
-        cursor = connection.cursor()
 
-        cursor.execute("""
-            SELECT
-                hospitals.name,
-                medicines.name,
-                inventory.quantity,
-                inventory.daily_usage,
-                inventory.expiry_date
-            FROM inventory
-            JOIN hospitals
-                ON inventory.hospital_id = hospitals.id
-            JOIN medicines
-                ON inventory.medicine_id = medicines.id
-            WHERE medicines.name LIKE ?
-            ORDER BY hospitals.name
-        """, ("%" + medicine_name + "%",))
+        try:
+            cursor = connection.cursor()
 
-        records = cursor.fetchall()
-        connection.close()
+            cursor.execute("""
+                SELECT
+                    hospitals.name,
+                    medicines.name,
+                    inventory.quantity,
+                    inventory.daily_usage,
+                    inventory.expiry_date
+                FROM inventory
+                JOIN hospitals
+                    ON inventory.hospital_id = hospitals.id
+                JOIN medicines
+                    ON inventory.medicine_id = medicines.id
+                WHERE medicines.name LIKE ?
+                ORDER BY hospitals.name
+            """, ("%" + medicine_name + "%",))
 
-        for hospital, medicine, quantity, usage, expiry in records:
+            records = cursor.fetchall()
 
-            if usage > 0:
-                days_remaining = round(quantity / usage, 1)
-            else:
-                days_remaining = None
+            for hospital, medicine, quantity, usage, expiry in records:
 
-            search_results.append({
-                "hospital": hospital,
-                "medicine": medicine,
-                "quantity": quantity,
-                "daily_usage": usage,
-                "days_remaining": days_remaining,
-                "expiry_date": expiry
-            })
+                if usage > 0:
+                    days_remaining = round(quantity / usage, 1)
+                else:
+                    days_remaining = None
+
+                search_results.append({
+                    "hospital": hospital,
+                    "medicine": medicine,
+                    "quantity": quantity,
+                    "daily_usage": usage,
+                    "days_remaining": days_remaining,
+                    "expiry_date": expiry
+                })
+
+        finally:
+            connection.close()
 
     return render_template(
         "search.html",

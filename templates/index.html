@@ -19,6 +19,8 @@
     </header>
 
     <main>
+
+      <!-- Medicine Search -->
       <section class="search-section">
         <h2>Find Medicine Across Hospitals</h2>
 
@@ -34,19 +36,22 @@
             required
           />
 
-          <button type="submit" class="approve-btn">Search Medicine</button>
+          <button type="submit" class="approve-btn">
+            Search Medicine
+          </button>
         </form>
       </section>
 
+      <!-- Transfer Message -->
       {% if request.args.get('transfer_message') %}
-
       <div class="transfer-message">
         {{ request.args.get('transfer_message') }}
       </div>
-
       {% endif %}
 
+      <!-- Dashboard Summary -->
       <section class="summary">
+
         <div class="card">
           <h3>Total Hospitals</h3>
           <p>{{ total_hospitals }}</p>
@@ -66,8 +71,10 @@
           <h3>Low Stock</h3>
           <p>{{ low_count }}</p>
         </div>
+
       </section>
 
+      <!-- Medicine Inventory Overview -->
       <section>
         <h2>Medicine Inventory Overview</h2>
 
@@ -85,89 +92,58 @@
 
           <tbody>
             {% for item in stock_data %}
-
             <tr>
               <td>{{ item.hospital }}</td>
               <td>{{ item.medicine }}</td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.daily_usage }}</td>
 
-              
-<td>
-    {% if item.days_remaining is not none %}
+              <td>
+                {% if item.days_remaining is not none %}
 
-        {{ "%.1f"|format(item.days_remaining) }} days
+                  {{ "%.1f"|format(item.days_remaining) }} days
 
-        <div class="stock-progress">
-            <div
-                class="stock-progress-fill {{ item.status|lower|replace(' ', '-') }}"
-                style="width: {{ [item.days_remaining / 30 * 100, 100]|min }}%;">
-            </div>
-        </div>
+                  <div class="stock-progress">
+                    <div
+                      class="stock-progress-fill {{ item.status|lower|replace(' ', '-') }}"
+                      style="width: {{ [item.days_remaining / 30 * 100, 100]|min }}%;">
+                    </div>
+                  </div>
 
-    {% else %}
-
-        Not available
-
-    {% endif %}
-</td>
-
+                {% else %}
+                  Not available
+                {% endif %}
+              </td>
 
               <td>
-                <span
-                  class="status-badge {{ item.status|lower|replace(' ', '-') }}"
-                >
+                <span class="status-badge {{ item.status|lower|replace(' ', '-') }}">
                   {{ item.status }}
                 </span>
               </td>
             </tr>
-
             {% endfor %}
           </tbody>
         </table>
       </section>
 
+      <!-- Medicine Stock Comparison Chart -->
+      <section>
+        <h2>Medicine Stock Comparison</h2>
+
+        <label for="medicineSelect">Select Medicine:</label>
+
+        <select id="medicineSelect">
+          {% for medicine in chart_data.keys() %}
+          <option value="{{ medicine }}">{{ medicine }}</option>
+          {% endfor %}
+        </select>
+
+        <canvas id="stockChart"></canvas>
+      </section>
+
+      <!-- Medicine Consumption Trends -->
       <section>
         <h2>Medicine Consumption Trends</h2>
-      </section>
-        <section>
-          <h2>Medicine Expiry Monitoring</h2>
-        </section>
-          <table>
-            <thead>
-              <tr>
-                <th>Hospital</th>
-                <th>Medicine</th>
-                <th>Quantity</th>
-                <th>Expiry Date</th>
-                <th>Days Remaining</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {% for item in expiry_data %}
-
-              <tr>
-                <td>{{ item.hospital }}</td>
-
-                <td>{{ item.medicine }}</td>
-
-                <td>{{ item.quantity }}</td>
-
-                <td>{{ item.expiry_date }}</td>
-
-                <td>{{ item.days_remaining }}</td>
-
-                <td class="{{ item.status|lower|replace(' ', '-') }}">
-                  {{ item.status }}
-                </td>
-              </tr>
-
-              {% endfor %}
-            </tbody>
-          </table>
-        </section>
 
         <table>
           <thead>
@@ -181,86 +157,202 @@
 
           <tbody>
             {% for item in consumption_data %}
-
             <tr>
               <td>{{ item.hospital }}</td>
-
               <td>{{ item.medicine }}</td>
-
               <td>{{ item.average_usage }}</td>
-
-              <td class="{{ item.trend|lower }}">{{ item.trend }}</td>
+              <td class="{{ item.trend|lower }}">
+                {{ item.trend }}
+              </td>
             </tr>
-
             {% endfor %}
           </tbody>
         </table>
       </section>
 
+      <!-- Medicine Expiry Monitoring -->
+      <section>
+        <h2>Medicine Expiry Monitoring</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>Medicine</th>
+              <th>Quantity</th>
+              <th>Expiry Date</th>
+              <th>Days Remaining</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in expiry_data %}
+            <tr>
+              <td>{{ item.hospital }}</td>
+              <td>{{ item.medicine }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.expiry_date }}</td>
+              <td>{{ item.days_remaining }}</td>
+              <td class="{{ item.status|lower|replace(' ', '-') }}">
+                {{ item.status }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Smart Redistribution Recommendations -->
       <section>
         <h2>Smart Redistribution Recommendations</h2>
 
-        {% if recommendations %} {% for item in recommendations %}
+        {% if recommendations %}
 
-        <div class="recommendation">
-          <h3>{{ item.medicine }}</h3>
+          {% for item in recommendations %}
 
-          <p>
-            <strong>From:</strong>
-            {{ item.from_hospital }}
-          </p>
+          <div class="recommendation">
+            <h3>{{ item.medicine }}</h3>
 
-          <p>
-            <strong>To:</strong>
-            {{ item.to_hospital }}
-          </p>
+            <p>
+              <strong>From:</strong>
+              {{ item.from_hospital }}
+            </p>
 
-          <p>
-            <strong>Transfer Quantity:</strong>
-            {{ item.quantity }} units
-          </p>
+            <p>
+              <strong>To:</strong>
+              {{ item.to_hospital }}
+            </p>
 
-          <p>
-            <strong>Reason:</strong>
-            {{ item.reason }}
-          </p>
+            <p>
+              <strong>Transfer Quantity:</strong>
+              {{ item.quantity }} units
+            </p>
 
-          <form
-            action="{{ url_for('approve_transfer_route') }}"
-            method="POST"
-            class="transfer-form"
-          >
-            <input type="hidden" name="medicine" value="{{ item.medicine }}" />
+            <p>
+              <strong>Reason:</strong>
+              {{ item.reason }}
+            </p>
 
-            <input
-              type="hidden"
-              name="from_hospital"
-              value="{{ item.from_hospital }}"
-            />
+            <form
+              action="{{ url_for('approve_transfer_route') }}"
+              method="POST"
+              class="transfer-form"
+            >
+              <input
+                type="hidden"
+                name="medicine"
+                value="{{ item.medicine }}"
+              />
 
-            <input
-              type="hidden"
-              name="to_hospital"
-              value="{{ item.to_hospital }}"
-            />
+              <input
+                type="hidden"
+                name="from_hospital"
+                value="{{ item.from_hospital }}"
+              />
 
-            <input type="hidden" name="quantity" value="{{ item.quantity }}" />
+              <input
+                type="hidden"
+                name="to_hospital"
+                value="{{ item.to_hospital }}"
+              />
 
-            <button type="submit" class="approve-btn">Approve Transfer</button>
-          </form>
-        </div>
+              <input
+                type="hidden"
+                name="quantity"
+                value="{{ item.quantity }}"
+              />
 
-        {% endfor %} {% else %}
+              <button type="submit" class="approve-btn">
+                Approve Transfer
+              </button>
+            </form>
+          </div>
 
-        <p>No redistribution recommendations available.</p>
+          {% endfor %}
+
+        {% else %}
+
+          <p>No redistribution recommendations available.</p>
 
         {% endif %}
       </section>
 
+      <!-- Application Notice -->
       <p class="notice">
         Note: This application uses simulated hospital inventory data for
         decision-support purposes.
       </p>
+
     </main>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const chartData = {{ chart_data | tojson }};
+
+  const medicineSelect = document.getElementById("medicineSelect");
+  const chartCanvas = document.getElementById("stockChart");
+
+  let stockChart;
+
+  function updateStockChart() {
+    const selectedMedicine = medicineSelect.value;
+    const medicineRecords = chartData[selectedMedicine] || [];
+
+    const hospitals = medicineRecords.map((item) => item.hospital);
+    const quantities = medicineRecords.map((item) => item.quantity);
+
+    if (stockChart) {
+      stockChart.destroy();
+    }
+
+    stockChart = new Chart(chartCanvas, {
+      type: "bar",
+
+      data: {
+        labels: hospitals,
+
+        datasets: [
+          {
+            label: "Available Stock (units)",
+            data: quantities,
+            backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"],
+            borderWidth: 1,
+          },
+        ],
+      },
+
+      options: {
+        responsive: true,
+
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Quantity (units)",
+            },
+          },
+
+          x: {
+            title: {
+              display: true,
+              text: "Hospitals",
+            },
+          },
+        },
+      },
+    });
+  }
+
+  if (medicineSelect && chartCanvas) {
+    medicineSelect.addEventListener("change", updateStockChart);
+
+    if (medicineSelect.options.length > 0) {
+      updateStockChart();
+    }
+  }
+</script>
   </body>
 </html>
