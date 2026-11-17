@@ -14,19 +14,97 @@
 
   <body>
     <header>
+      <div class="brand-bar">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.5 20.5 19 12a2.828 2.828 0 0 0-4-4l-8.5 8.5a4.243 4.243 0 0 0 6 6Z" />
+              <path d="m16 8 3-3a2.828 2.828 0 0 1 4 4l-3 3" />
+              <path d="m9 11 4 4" />
+              <path d="M5 12 3 14a2.828 2.828 0 0 0 4 4l2-2" />
+            </svg>
+          </span>
+          MediStock <span style="opacity: 0.45; font-weight: 500">/ Intelligence</span>
+        </div>
+
+        <span class="live-pill"><span class="live-dot"></span> SYSTEM LIVE</span>
+      </div>
+
       <h1>Medicine Stock Monitoring System</h1>
       <p>Intelligent Medicine Inventory and Redistribution</p>
     </header>
 
+    <!-- Section Navigation -->
+    <nav class="section-nav" aria-label="Dashboard sections">
+      <div class="nav-inner">
+        <span class="nav-brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+          </svg>
+          Navigate
+        </span>
+
+        <div class="nav-links">
+          <a class="nav-link" href="#search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+            </svg>
+            Search
+          </a>
+          <a class="nav-link" href="#summary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Overview
+          </a>
+          <a class="nav-link" href="#overview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+            Stock
+          </a>
+          <a class="nav-link" href="#comparison">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20V10M18 20V4M6 20v-4" />
+            </svg>
+            Chart
+          </a>
+          <a class="nav-link" href="#consumption">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17l6-6 4 4 8-8" /><path d="M21 7v6h-6" />
+            </svg>
+            Consumption
+          </a>
+          <a class="nav-link" href="#expiry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+            Expiry
+          </a>
+          <a class="nav-link" href="#recommendations">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+            Transfers
+          </a>
+        </div>
+      </div>
+    </nav>
+
     <main>
-
       <!-- Medicine Search -->
-      <section class="search-section">
-        <h2>Find Medicine Across Hospitals</h2>
+      <section class="search-section" id="search">
+        <div class="search-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </div>
 
-        <p>
-          Search for a medicine to check its availability across all hospitals.
-        </p>
+        <div class="search-copy">
+          <h2>Find Medicine Across Hospitals</h2>
+          <p>Search availability across every hospital in the network.</p>
+        </div>
 
         <form action="{{ url_for('search_medicine') }}" method="GET">
           <input
@@ -37,6 +115,10 @@
           />
 
           <button type="submit" class="approve-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
             Search Medicine
           </button>
         </form>
@@ -45,193 +127,251 @@
       <!-- Transfer Message -->
       {% if request.args.get('transfer_message') %}
       <div class="transfer-message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
         {{ request.args.get('transfer_message') }}
       </div>
       {% endif %}
 
       <!-- Dashboard Summary -->
-      <section class="summary">
-
+      <section class="summary" id="summary">
         <div class="card">
-          <h3>Total Hospitals</h3>
+          <div class="card-head">
+            <h3>Total Hospitals</h3>
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18" />
+                <path d="M5 21V7l7-4 7 4v14" />
+                <path d="M9 21v-6h6v6" />
+                <path d="M9 10h.01M15 10h.01" />
+              </svg>
+            </span>
+          </div>
           <p>{{ total_hospitals }}</p>
         </div>
 
         <div class="card">
-          <h3>Medicine Categories</h3>
+          <div class="card-head">
+            <h3>Medicine Categories</h3>
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.5 20.5 19 12a2.828 2.828 0 0 0-4-4l-8.5 8.5a4.243 4.243 0 0 0 6 6Z" />
+                <path d="m16 8 3-3a2.828 2.828 0 0 1 4 4l-3 3" />
+              </svg>
+            </span>
+          </div>
           <p>{{ total_medicines }}</p>
         </div>
 
         <div class="card critical">
-          <h3>Critical Stock</h3>
+          <div class="card-head">
+            <h3>Critical Stock</h3>
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m10.29 3.86-8.18 14A2 2 0 0 0 3.82 21h16.36a2 2 0 0 0 1.71-3.14l-8.18-14a2 2 0 0 0-3.42 0Z" />
+                <path d="M12 9v4M12 17h.01" />
+              </svg>
+            </span>
+          </div>
           <p>{{ critical_count }}</p>
         </div>
 
         <div class="card low">
-          <h3>Low Stock</h3>
+          <div class="card-head">
+            <h3>Low Stock</h3>
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="m19 9-5 5-4-4-3 3" />
+              </svg>
+            </span>
+          </div>
           <p>{{ low_count }}</p>
         </div>
-
       </section>
 
       <!-- Medicine Inventory Overview -->
-      <section>
+      <section id="overview">
         <h2>Medicine Inventory Overview</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Hospital</th>
-              <th>Medicine</th>
-              <th>Current Stock</th>
-              <th>Daily Usage</th>
-              <th>Days Remaining</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Medicine</th>
+                <th>Current Stock</th>
+                <th>Daily Usage</th>
+                <th>Days Remaining</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {% for item in stock_data %}
-            <tr>
-              <td>{{ item.hospital }}</td>
-              <td>{{ item.medicine }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>{{ item.daily_usage }}</td>
+            <tbody>
+              {% for item in stock_data %}
+              <tr>
+                <td>{{ item.hospital }}</td>
+                <td>{{ item.medicine }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.daily_usage }}</td>
 
-              <td>
-                {% if item.days_remaining is not none %}
+                <td>
+                  {% if item.days_remaining is not none %}
 
-                  {{ "%.1f"|format(item.days_remaining) }} days
+                    {{ "%.1f"|format(item.days_remaining) }} days
 
-                  <div class="stock-progress">
-                    <div
-                      class="stock-progress-fill {{ item.status|lower|replace(' ', '-') }}"
-                      style="width: {{ [item.days_remaining / 30 * 100, 100]|min }}%;">
+                    <div class="stock-progress">
+                      <div
+                        class="stock-progress-fill {{ item.status|lower|replace(' ', '-') }}"
+                        style="width: {{ [item.days_remaining / 30 * 100, 100]|min }}%;">
+                      </div>
                     </div>
-                  </div>
 
-                {% else %}
-                  Not available
-                {% endif %}
-              </td>
+                  {% else %}
+                    Not available
+                  {% endif %}
+                </td>
 
-              <td>
-                <span class="status-badge {{ item.status|lower|replace(' ', '-') }}">
-                  {{ item.status }}
-                </span>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+                <td>
+                  <span class="status-badge {{ item.status|lower|replace(' ', '-') }}">
+                    {{ item.status }}
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Medicine Stock Comparison Chart -->
-      <section>
+      <section class="panel" id="comparison">
         <h2>Medicine Stock Comparison</h2>
 
-        <label for="medicineSelect">Select Medicine:</label>
+        <div class="chart-controls">
+          <label for="medicineSelect">Select Medicine:</label>
 
-        <select id="medicineSelect">
-          {% for medicine in chart_data.keys() %}
-          <option value="{{ medicine }}">{{ medicine }}</option>
-          {% endfor %}
-        </select>
+          <select id="medicineSelect">
+            {% for medicine in chart_data.keys() %}
+            <option value="{{ medicine }}">{{ medicine }}</option>
+            {% endfor %}
+          </select>
+        </div>
 
-        <canvas id="stockChart"></canvas>
+        <div class="chart-frame">
+          <canvas id="stockChart"></canvas>
+        </div>
       </section>
 
       <!-- Medicine Consumption Trends -->
-      <section>
+      <section id="consumption">
         <h2>Medicine Consumption Trends</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Hospital</th>
-              <th>Medicine</th>
-              <th>Average Daily Consumption</th>
-              <th>Demand Trend</th>
-            </tr>
-          </thead>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Medicine</th>
+                <th>Average Daily Consumption</th>
+                <th>Demand Trend</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {% for item in consumption_data %}
-            <tr>
-              <td>{{ item.hospital }}</td>
-              <td>{{ item.medicine }}</td>
-              <td>{{ item.average_usage }}</td>
-              <td class="{{ item.trend|lower }}">
-                {{ item.trend }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            <tbody>
+              {% for item in consumption_data %}
+              <tr>
+                <td>{{ item.hospital }}</td>
+                <td>{{ item.medicine }}</td>
+                <td>{{ item.average_usage }}</td>
+                <td class="{{ item.trend|lower }}">
+                  {{ item.trend }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Medicine Expiry Monitoring -->
-      <section>
+      <section id="expiry">
         <h2>Medicine Expiry Monitoring</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Hospital</th>
-              <th>Medicine</th>
-              <th>Quantity</th>
-              <th>Expiry Date</th>
-              <th>Days Remaining</th>
-              <th>Status</th>
-            </tr>
-          </thead>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Days Remaining</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {% for item in expiry_data %}
-            <tr>
-              <td>{{ item.hospital }}</td>
-              <td>{{ item.medicine }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>{{ item.expiry_date }}</td>
-              <td>{{ item.days_remaining }}</td>
-              <td class="{{ item.status|lower|replace(' ', '-') }}">
-                {{ item.status }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            <tbody>
+              {% for item in expiry_data %}
+              <tr>
+                <td>{{ item.hospital }}</td>
+                <td>{{ item.medicine }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.expiry_date }}</td>
+                <td>{{ item.days_remaining }}</td>
+                <td class="{{ item.status|lower|replace(' ', '-') }}">
+                  {{ item.status }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <!-- Smart Redistribution Recommendations -->
-      <section>
+      <section id="recommendations">
         <h2>Smart Redistribution Recommendations</h2>
 
         {% if recommendations %}
 
+          <div class="recommendations">
           {% for item in recommendations %}
 
           <div class="recommendation">
-            <h3>{{ item.medicine }}</h3>
+            <h3>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M2 12h20" />
+                <circle cx="12" cy="12" r="9" />
+              </svg>
+              {{ item.medicine }}
+            </h3>
+
+            <div class="route">
+              <div class="route-node">
+                <span>From</span>
+                <strong>{{ item.from_hospital }}</strong>
+              </div>
+
+              <span class="route-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+
+              <div class="route-node">
+                <span>To</span>
+                <strong>{{ item.to_hospital }}</strong>
+              </div>
+            </div>
 
             <p>
-              <strong>From:</strong>
-              {{ item.from_hospital }}
+              <span class="qty-pill">{{ item.quantity }} units</span>
             </p>
 
-            <p>
-              <strong>To:</strong>
-              {{ item.to_hospital }}
-            </p>
-
-            <p>
-              <strong>Transfer Quantity:</strong>
-              {{ item.quantity }} units
-            </p>
-
-            <p>
-              <strong>Reason:</strong>
-              {{ item.reason }}
+            <p class="reason">
+              <strong>Reason:</strong> {{ item.reason }}
             </p>
 
             <form
@@ -264,22 +404,36 @@
               />
 
               <button type="submit" class="approve-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
                 Approve Transfer
               </button>
             </form>
           </div>
 
           {% endfor %}
+          </div>
 
         {% else %}
 
-          <p>No redistribution recommendations available.</p>
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 8v4M12 16h.01" />
+            </svg>
+            No redistribution recommendations available for the current stock levels.
+          </div>
 
         {% endif %}
       </section>
 
       <!-- Application Notice -->
       <p class="notice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5M12 8h.01" />
+        </svg>
         Note: This application uses simulated hospital inventory data for
         decision-support purposes.
       </p>
@@ -325,6 +479,7 @@
 
       options: {
         responsive: true,
+        maintainAspectRatio: false,
 
         scales: {
           y: {
@@ -352,6 +507,43 @@
     if (medicineSelect.options.length > 0) {
       updateStockChart();
     }
+  }
+
+  // Highlight the navigation link for the section currently in view
+  const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+  const navSections = navLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  function setActiveLink(id) {
+    navLinks.forEach((link) => {
+      link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+    });
+  }
+
+  if (navSections.length > 0) {
+    setActiveLink(navSections[0].id);
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveLink(entry.target.id);
+            }
+          });
+        },
+        { rootMargin: "-90px 0px -60% 0px" }
+      );
+
+      navSections.forEach((section) => observer.observe(section));
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        setActiveLink(link.getAttribute("href").slice(1));
+      });
+    });
   }
 </script>
   </body>

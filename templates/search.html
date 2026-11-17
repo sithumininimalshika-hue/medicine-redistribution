@@ -13,17 +13,93 @@
 
   <body>
     <header>
+      <div class="brand-bar">
+        <div class="brand">
+          <span class="brand-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.5 20.5 19 12a2.828 2.828 0 0 0-4-4l-8.5 8.5a4.243 4.243 0 0 0 6 6Z" />
+              <path d="m16 8 3-3a2.828 2.828 0 0 1 4 4l-3 3" />
+            </svg>
+          </span>
+          MediStock <span style="opacity: 0.45; font-weight: 500">/ Intelligence</span>
+        </div>
+
+        <span class="live-pill"><span class="live-dot"></span> SYSTEM LIVE</span>
+      </div>
+
       <h1>Medicine Search</h1>
       <p>Check medicine availability across hospitals</p>
     </header>
 
-    <main>
-      <a href="{{ url_for('home') }}">← Back to Dashboard</a>
+    <!-- Section Navigation -->
+    <nav class="section-nav" aria-label="Dashboard sections">
+      <div class="nav-inner">
+        <span class="nav-brand">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+          </svg>
+          Navigate
+        </span>
 
-      <section>
+        <div class="nav-links">
+          <a class="nav-link" href="{{ url_for('home') }}#search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+            </svg>
+            Search
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#summary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            Overview
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#overview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18" /><path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+            Stock
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#comparison">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20V10M18 20V4M6 20v-4" />
+            </svg>
+            Chart
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#consumption">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 17l6-6 4 4 8-8" /><path d="M21 7v6h-6" />
+            </svg>
+            Consumption
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#expiry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
+            </svg>
+            Expiry
+          </a>
+          <a class="nav-link" href="{{ url_for('home') }}#recommendations">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+            Transfers
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <a class="back-link" href="{{ url_for('home') }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+          <path d="m12 19-7-7 7-7M19 12H5" />
+        </svg>
+        Back to Dashboard
+      </a>
+
+      <section class="panel">
         <h2>Search for a Medicine</h2>
 
-        <form action="{{ url_for('search_medicine') }}" method="GET">
+        <form class="search-page-form" action="{{ url_for('search_medicine') }}" method="GET">
           <input
             type="text"
             name="medicine"
@@ -32,51 +108,68 @@
             required
           />
 
-          <button type="submit" class="approve-btn">Search</button>
+          <button type="submit" class="approve-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            Search
+          </button>
         </form>
       </section>
 
       {% if medicine_name %}
 
       <section>
-        <h2>Search Results for "{{ medicine_name }}"</h2>
+        <h2>
+          Search Results for "{{ medicine_name }}"
+          <span class="result-count">{{ search_results|length }} found</span>
+        </h2>
 
         {% if search_results %}
 
-        <table>
-          <thead>
-            <tr>
-              <th>Hospital</th>
-              <th>Medicine</th>
-              <th>Current Stock</th>
-              <th>Daily Usage</th>
-              <th>Days Remaining</th>
-              <th>Expiry Date</th>
-            </tr>
-          </thead>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Medicine</th>
+                <th>Current Stock</th>
+                <th>Daily Usage</th>
+                <th>Days Remaining</th>
+                <th>Expiry Date</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            {% for item in search_results %}
-            <tr>
-              <td>{{ item.hospital }}</td>
-              <td>{{ item.medicine }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>{{ item.daily_usage }}</td>
+            <tbody>
+              {% for item in search_results %}
+              <tr>
+                <td>{{ item.hospital }}</td>
+                <td>{{ item.medicine }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.daily_usage }}</td>
 
-              <td>
-                {% if item.days_remaining is not none %} {{ item.days_remaining
-                }} days {% else %} Not available {% endif %}
-              </td>
+                <td>
+                  {% if item.days_remaining is not none %} {{ item.days_remaining
+                  }} days {% else %} Not available {% endif %}
+                </td>
 
-              <td>{{ item.expiry_date or "Not recorded" }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+                <td>{{ item.expiry_date or "Not recorded" }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
 
         {% else %}
 
-        <p>No matching medicine found.</p>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          No matching medicine found. Try a different name.
+        </div>
 
         {% endif %}
       </section>

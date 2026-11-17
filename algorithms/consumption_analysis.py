@@ -1,7 +1,11 @@
 
 import sqlite3
 
-DATABASE = "database/medicine.db"
+import os
+from pathlib import Path
+
+_DEFAULT_DB = Path(__file__).resolve().parent.parent / "database" / "medicine.db"
+DATABASE = os.environ.get("MEDICINE_DB_PATH", str(_DEFAULT_DB))
 
 
 def analyze_consumption():
@@ -54,17 +58,22 @@ def analyze_consumption():
         first_half = quantities[:len(quantities) // 2]
         second_half = quantities[len(quantities) // 2:]
 
-        first_average = sum(first_half) / len(first_half)
-        second_average = sum(second_half) / len(second_half)
-
-        if second_average > first_average * 1.05:
-            trend = "Increasing"
-
-        elif second_average < first_average * 0.95:
-            trend = "Decreasing"
+        if not first_half or not second_half:
+            # Too few records to compare two halves of the period
+            trend = "Stable"
 
         else:
-            trend = "Stable"
+            first_average = sum(first_half) / len(first_half)
+            second_average = sum(second_half) / len(second_half)
+
+            if second_average > first_average * 1.05:
+                trend = "Increasing"
+
+            elif second_average < first_average * 0.95:
+                trend = "Decreasing"
+
+            else:
+                trend = "Stable"
 
         results.append({
 

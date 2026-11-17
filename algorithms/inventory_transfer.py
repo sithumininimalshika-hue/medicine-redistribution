@@ -2,7 +2,11 @@
 import sqlite3
 from datetime import date, timedelta
 
-DATABASE = "database/medicine.db"
+import os
+from pathlib import Path
+
+_DEFAULT_DB = Path(__file__).resolve().parent.parent / "database" / "medicine.db"
+DATABASE = os.environ.get("MEDICINE_DB_PATH", str(_DEFAULT_DB))
 
 TARGET_DAYS = 7
 EXPIRY_WARNING_DAYS = 30
@@ -18,6 +22,9 @@ def approve_transfer(medicine, from_hospital, to_hospital, quantity):
         # Validate transfer quantity
         if quantity <= 0:
             return False, "Invalid transfer quantity."
+
+        if from_hospital == to_hospital:
+            return False, "Source and destination hospitals must be different."
 
         # Find medicine ID
         cursor.execute("""

@@ -9,6 +9,11 @@ from algorithms.consumption_analysis import analyze_consumption
 from algorithms.inventory_transfer import approve_transfer
 from algorithms.expiry_analysis import analyze_expiry
 
+import os
+from pathlib import Path
+
+_DEFAULT_MED_DB = Path(__file__).resolve().parent / "database" / "medicine.db"
+MEDICINE_DB_PATH = os.environ.get("MEDICINE_DB_PATH", str(_DEFAULT_MED_DB))
 app = Flask(__name__)
 
 
@@ -110,7 +115,7 @@ def search_medicine():
 
     if medicine_name:
 
-        connection = sqlite3.connect("database/medicine.db")
+        connection = sqlite3.connect(MEDICINE_DB_PATH)
 
         try:
             cursor = connection.cursor()

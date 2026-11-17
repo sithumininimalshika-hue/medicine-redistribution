@@ -2,7 +2,11 @@
 import sqlite3
 from datetime import date, timedelta
 
-DATABASE = "database/medicine.db"
+import os
+from pathlib import Path
+
+_DEFAULT_DB = Path(__file__).resolve().parent.parent / "database" / "medicine.db"
+DATABASE = os.environ.get("MEDICINE_DB_PATH", str(_DEFAULT_DB))
 
 
 def add_expiry_dates():
