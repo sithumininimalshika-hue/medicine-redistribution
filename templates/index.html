@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Medicine Stock Monitoring System</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Medicine Stock Monitoring System</h1>
+      <p>Intelligent Medicine Inventory and Redistribution</p>
+    </header>
+
+    <main>
+      {% if request.args.get('transfer_message') %}
+
+      <div class="transfer-message">
+        {{ request.args.get('transfer_message') }}
+      </div>
+
+      {% endif %}
+
+      <section class="summary">
+        <div class="card">
+          <h3>Total Hospitals</h3>
+          <p>{{ total_hospitals }}</p>
+        </div>
+
+        <div class="card">
+          <h3>Medicine Categories</h3>
+          <p>{{ total_medicines }}</p>
+        </div>
+
+        <div class="card critical">
+          <h3>Critical Stock</h3>
+          <p>{{ critical_count }}</p>
+        </div>
+
+        <div class="card low">
+          <h3>Low Stock</h3>
+          <p>{{ low_count }}</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Medicine Inventory Overview</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>Medicine</th>
+              <th>Current Stock</th>
+              <th>Daily Usage</th>
+              <th>Days Remaining</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in stock_data %}
+
+            <tr>
+              <td>{{ item.hospital }}</td>
+              <td>{{ item.medicine }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.daily_usage }}</td>
+
+              <td>
+                {% if item.days_remaining is not none %} {{
+                "%.1f"|format(item.days_remaining) }} days {% else %} Not
+                available {% endif %}
+              </td>
+
+              <td class="{{ item.status|lower|replace(' ', '-') }}">
+                {{ item.status }}
+              </td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Medicine Consumption Trends</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>Medicine</th>
+              <th>Average Daily Consumption</th>
+              <th>Demand Trend</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in consumption_data %}
+
+            <tr>
+              <td>{{ item.hospital }}</td>
+
+              <td>{{ item.medicine }}</td>
+
+              <td>{{ item.average_usage }}</td>
+
+              <td class="{{ item.trend|lower }}">{{ item.trend }}</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Smart Redistribution Recommendations</h2>
+
+        {% if recommendations %} {% for item in recommendations %}
+
+        <div class="recommendation">
+          <h3>{{ item.medicine }}</h3>
+
+          <p>
+            <strong>From:</strong>
+            {{ item.from_hospital }}
+          </p>
+
+          <p>
+            <strong>To:</strong>
+            {{ item.to_hospital }}
+          </p>
+
+          <p>
+            <strong>Transfer Quantity:</strong>
+            {{ item.quantity }} units
+          </p>
+
+          <p>
+            <strong>Reason:</strong>
+            {{ item.reason }}
+          </p>
+
+          <form
+            action="{{ url_for('approve_transfer_route') }}"
+            method="POST"
+            class="transfer-form"
+          >
+            <input type="hidden" name="medicine" value="{{ item.medicine }}" />
+
+            <input
+              type="hidden"
+              name="from_hospital"
+              value="{{ item.from_hospital }}"
+            />
+
+            <input
+              type="hidden"
+              name="to_hospital"
+              value="{{ item.to_hospital }}"
+            />
+
+            <input type="hidden" name="quantity" value="{{ item.quantity }}" />
+
+            <button type="submit" class="approve-btn">Approve Transfer</button>
+          </form>
+        </div>
+
+        {% endfor %} {% else %}
+
+        <p>No redistribution recommendations available.</p>
+
+        {% endif %}
+      </section>
+
+      <p class="notice">
+        Note: This application uses simulated hospital inventory data for
+        decision-support purposes.
+      </p>
+    </main>
+  </body>
+</html>
