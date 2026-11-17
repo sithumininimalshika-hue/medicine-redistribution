@@ -235,3 +235,102 @@ tr:hover {
 }
 
 
+/* Medicine expiry status */
+
+.expired {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.expiring-soon {
+    color: #d18a00;
+    font-weight: bold;
+}
+
+.safe {
+    color: #198754;
+    font-weight: bold;
+}
+
+/* Medicine search section */
+
+.search-section {
+    background: white;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+}
+
+.search-section input {
+    padding: 12px;
+    width: 60%;
+    max-width: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.search-section button {
+    margin-top: 10px;
+}
+
+
+/* Stock status badges */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status-badge.critical {
+    background-color: #ffe0e0;
+    color: #c62828;
+}
+
+.status-badge.low {
+    background-color: #fff0cc;
+    color: #a66a00;
+}
+
+.status-badge.adequate {
+    background-color: #d9f5e3;
+    color: #167a3e;
+}
+
+.status-badge.no-recorded-usage {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+
+/* Stock level progress bar */
+
+.stock-progress {
+    width: 120px;
+    height: 9px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.stock-progress-fill {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.stock-progress-fill.critical {
+    background-color: #dc3545;
+}
+
+.stock-progress-fill.low {
+    background-color: #f0ad4e;
+}
+
+.stock-progress-fill.adequate {
+    background-color: #198754;
+}
+

@@ -1,9 +1,12 @@
 
 import sqlite3
+from datetime import date, timedelta
+
 
 DATABASE = "database/medicine.db"
 
 TARGET_DAYS = 7
+EXPIRY_WARNING_DAYS = 30
 
 
 def generate_recommendations():
@@ -16,7 +19,8 @@ def generate_recommendations():
             hospitals.name,
             medicines.name,
             inventory.quantity,
-            inventory.daily_usage
+            inventory.daily_usage,
+            inventory.expiry_date
         FROM inventory
         JOIN hospitals
             ON inventory.hospital_id = hospitals.id
@@ -30,7 +34,7 @@ def generate_recommendations():
     # Group inventory records by medicine
     medicine_data = {}
 
-    for hospital, medicine, quantity, daily_usage in records:
+    for hospital, medicine, quantity, daily_usage, expiry_date in records:
 
         medicine_data.setdefault(medicine, [])
 
@@ -43,7 +47,8 @@ def generate_recommendations():
             "hospital": hospital,
             "quantity": quantity,
             "daily_usage": daily_usage,
-            "days_remaining": days_remaining
+            "days_remaining": days_remaining,
+            "expiry_date": expiry_date
         })
 
     recommendations = []
@@ -81,6 +86,20 @@ def generate_recommendations():
 
             # Hospitals with transferable excess stock
             else:
+
+                expiry_date = hospital["expiry_date"]
+
+                # Do not use stock without an expiry date
+                if expiry_date is None:
+                    continue
+
+                expiry = date.fromisoformat(expiry_date)
+
+                # Do not recommend expired or soon-expiring stock
+                if expiry <= date.today() + timedelta(
+                    days=EXPIRY_WARNING_DAYS
+                ):
+                    continue
 
                 safe_stock = (
                     hospital["daily_usage"] * TARGET_DAYS

@@ -19,6 +19,25 @@
     </header>
 
     <main>
+      <section class="search-section">
+        <h2>Find Medicine Across Hospitals</h2>
+
+        <p>
+          Search for a medicine to check its availability across all hospitals.
+        </p>
+
+        <form action="{{ url_for('search_medicine') }}" method="GET">
+          <input
+            type="text"
+            name="medicine"
+            placeholder="Search medicine (e.g. Paracetamol)"
+            required
+          />
+
+          <button type="submit" class="approve-btn">Search Medicine</button>
+        </form>
+      </section>
+
       {% if request.args.get('transfer_message') %}
 
       <div class="transfer-message">
@@ -73,14 +92,33 @@
               <td>{{ item.quantity }}</td>
               <td>{{ item.daily_usage }}</td>
 
-              <td>
-                {% if item.days_remaining is not none %} {{
-                "%.1f"|format(item.days_remaining) }} days {% else %} Not
-                available {% endif %}
-              </td>
+              
+<td>
+    {% if item.days_remaining is not none %}
 
-              <td class="{{ item.status|lower|replace(' ', '-') }}">
-                {{ item.status }}
+        {{ "%.1f"|format(item.days_remaining) }} days
+
+        <div class="stock-progress">
+            <div
+                class="stock-progress-fill {{ item.status|lower|replace(' ', '-') }}"
+                style="width: {{ [item.days_remaining / 30 * 100, 100]|min }}%;">
+            </div>
+        </div>
+
+    {% else %}
+
+        Not available
+
+    {% endif %}
+</td>
+
+
+              <td>
+                <span
+                  class="status-badge {{ item.status|lower|replace(' ', '-') }}"
+                >
+                  {{ item.status }}
+                </span>
               </td>
             </tr>
 
@@ -91,6 +129,45 @@
 
       <section>
         <h2>Medicine Consumption Trends</h2>
+      </section>
+        <section>
+          <h2>Medicine Expiry Monitoring</h2>
+        </section>
+          <table>
+            <thead>
+              <tr>
+                <th>Hospital</th>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Days Remaining</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in expiry_data %}
+
+              <tr>
+                <td>{{ item.hospital }}</td>
+
+                <td>{{ item.medicine }}</td>
+
+                <td>{{ item.quantity }}</td>
+
+                <td>{{ item.expiry_date }}</td>
+
+                <td>{{ item.days_remaining }}</td>
+
+                <td class="{{ item.status|lower|replace(' ', '-') }}">
+                  {{ item.status }}
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </section>
 
         <table>
           <thead>

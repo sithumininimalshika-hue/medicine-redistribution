@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medicine Search</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <h1>Medicine Search</h1>
+      <p>Check medicine availability across hospitals</p>
+    </header>
+
+    <main>
+      <a href="{{ url_for('home') }}">← Back to Dashboard</a>
+
+      <section>
+        <h2>Search for a Medicine</h2>
+
+        <form action="{{ url_for('search_medicine') }}" method="GET">
+          <input
+            type="text"
+            name="medicine"
+            placeholder="Enter medicine name"
+            value="{{ medicine_name }}"
+            required
+          />
+
+          <button type="submit" class="approve-btn">Search</button>
+        </form>
+      </section>
+
+      {% if medicine_name %}
+
+      <section>
+        <h2>Search Results for "{{ medicine_name }}"</h2>
+
+        {% if search_results %}
+
+        <table>
+          <thead>
+            <tr>
+              <th>Hospital</th>
+              <th>Medicine</th>
+              <th>Current Stock</th>
+              <th>Daily Usage</th>
+              <th>Days Remaining</th>
+              <th>Expiry Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for item in search_results %}
+            <tr>
+              <td>{{ item.hospital }}</td>
+              <td>{{ item.medicine }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.daily_usage }}</td>
+
+              <td>
+                {% if item.days_remaining is not none %} {{ item.days_remaining
+                }} days {% else %} Not available {% endif %}
+              </td>
+
+              <td>{{ item.expiry_date or "Not recorded" }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        {% else %}
+
+        <p>No matching medicine found.</p>
+
+        {% endif %}
+      </section>
+
+      {% endif %}
+    </main>
+  </body>
+</html>
