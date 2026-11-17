@@ -898,6 +898,294 @@ tbody td:first-child {
 }
 
 /* ==========================================================================
+   ADD POPUP (MODAL + FLOATING + BUTTON)
+   ========================================================================== */
+
+button.nav-link {
+    background: transparent;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.add-fab {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    z-index: 60;
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: #fff;
+    background: radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.3), transparent 55%),
+        linear-gradient(135deg, var(--primary), var(--secondary));
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4),
+        inset 0 -3px 8px rgba(15, 23, 42, 0.16),
+        0 16px 32px -8px rgba(8, 145, 178, 0.65),
+        0 0 0 5px rgba(255, 255, 255, 0.88);
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition),
+        filter var(--transition);
+}
+
+/* Soft pulsing halo around the button */
+.add-fab::before {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(8, 145, 178, 0.3);
+    animation: fab-pulse 2.8s ease-out infinite;
+}
+
+@keyframes fab-pulse {
+    0% { transform: scale(0.9); opacity: 0.75; }
+    70% { transform: scale(1.28); opacity: 0; }
+    100% { transform: scale(1.28); opacity: 0; }
+}
+
+/* Small label that slides in on hover */
+.add-fab::after {
+    content: 'Add new';
+    position: absolute;
+    right: calc(100% + 14px);
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--text);
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(8px);
+    pointer-events: none;
+    transition: opacity var(--transition), transform var(--transition);
+}
+
+.add-fab:hover {
+    transform: translateY(-4px) scale(1.06);
+    filter: brightness(1.07) saturate(1.08);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -3px 8px rgba(15, 23, 42, 0.12),
+        0 22px 40px -8px rgba(8, 145, 178, 0.75),
+        0 0 0 6px rgba(255, 255, 255, 0.95);
+}
+
+.add-fab:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.add-fab:hover svg {
+    transform: rotate(90deg);
+}
+
+.add-fab:active {
+    transform: translateY(-1px) scale(0.96);
+}
+
+.add-fab svg {
+    width: 26px;
+    height: 26px;
+    filter: drop-shadow(0 1px 2px rgba(15, 23, 42, 0.28));
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-modal {
+    width: min(940px, calc(100vw - 32px));
+    max-height: min(86vh, 780px);
+    overflow-y: auto;
+    padding: 26px 28px 30px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.add-modal::backdrop {
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.add-modal[open] {
+    animation: modal-in 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.modal-head h2 {
+    margin-bottom: 4px;
+}
+
+.modal-head p {
+    color: var(--text-muted);
+    font-size: 0.84rem;
+}
+
+.modal-close {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-muted);
+    background: var(--surface-soft);
+    cursor: pointer;
+    transition: color var(--transition), background var(--transition),
+        border-color var(--transition), transform var(--transition);
+}
+
+.modal-close:hover {
+    color: var(--danger);
+    background: var(--danger-soft);
+    border-color: #fecaca;
+    transform: rotate(90deg);
+}
+
+.modal-close svg {
+    width: 18px;
+    height: 18px;
+}
+
+.add-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.add-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 22px 24px;
+    transition: transform var(--transition), box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.add-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: #cbd5e1;
+}
+
+.add-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    margin-bottom: 20px;
+}
+
+.add-card-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+
+.add-grid .add-card:nth-child(2) .add-card-icon {
+    color: var(--secondary);
+    background: var(--secondary-soft);
+}
+
+.add-card-icon svg {
+    width: 21px;
+    height: 21px;
+}
+
+.add-card h3 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.add-card-head p {
+    margin-top: 3px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.form-field label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.form-field input {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--surface-soft);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color var(--transition), box-shadow var(--transition),
+        background var(--transition);
+}
+
+.form-field input::placeholder {
+    color: var(--text-faint);
+}
+
+.form-field input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--primary);
+    box-shadow: var(--ring);
+}
+
+.add-card .btn-primary {
+    width: 100%;
+}
+
+/* ==========================================================================
    MESSAGES + NOTICE
    ========================================================================== */
 
@@ -920,6 +1208,12 @@ tbody td:first-child {
     width: 19px;
     height: 19px;
     flex-shrink: 0;
+}
+
+.transfer-message.message-error {
+    background: var(--danger-soft);
+    border-color: #fecaca;
+    color: #991b1b;
 }
 
 .notice {
@@ -1008,6 +1302,10 @@ tbody td:first-child {
     .summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .add-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 760px) {
@@ -1057,6 +1355,21 @@ tbody td:first-child {
 @media (max-width: 520px) {
     .summary {
         grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .add-modal {
+        padding: 20px;
+    }
+
+    .add-fab {
+        right: 18px;
+        bottom: 18px;
+        width: 52px;
+        height: 52px;
     }
 
     .live-pill {

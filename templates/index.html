@@ -51,6 +51,12 @@
             </svg>
             Search
           </a>
+          <button type="button" class="nav-link" data-add-trigger>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" /><path d="M12 8v8M8 12h8" />
+            </svg>
+            Add New
+          </button>
           <a class="nav-link" href="#summary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
@@ -133,6 +139,148 @@
         {{ request.args.get('transfer_message') }}
       </div>
       {% endif %}
+
+      <!-- Add Result Message -->
+      {% if request.args.get('add_message') %}
+      <div id="add-message" class="transfer-message {% if request.args.get('add_success') == '0' %}message-error{% endif %}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          {% if request.args.get('add_success') == '0' %}
+            <circle cx="12" cy="12" r="9" /><path d="M12 8v4M12 16h.01" />
+          {% else %}
+            <path d="M20 6 9 17l-5-5" />
+          {% endif %}
+        </svg>
+        {{ request.args.get('add_message') }}
+      </div>
+      {% endif %}
+
+      <!-- Add Popup (opened by the + buttons) -->
+      <dialog id="addModal" class="add-modal" aria-labelledby="addModalTitle">
+        <div class="modal-head">
+          <div>
+            <h2 id="addModalTitle">Add Hospital or Medicine</h2>
+            <p>Register a new facility or medicine in the monitoring network.</p>
+          </div>
+
+          <button type="button" class="modal-close" data-close-add aria-label="Close popup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="add-grid">
+          <form
+            class="add-card"
+            action="{{ url_for('add_hospital_route') }}"
+            method="POST"
+          >
+            <div class="add-card-head">
+              <span class="add-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" />
+                </svg>
+              </span>
+              <div>
+                <h3>Add Hospital</h3>
+                <p>Zero-stock records are created for every existing medicine.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="hospitalName">Hospital Name</label>
+                <input
+                  id="hospitalName"
+                  type="text"
+                  name="name"
+                  placeholder="e.g. North Hospital"
+                  maxlength="120"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="hospitalLocation">Location</label>
+                <input
+                  id="hospitalLocation"
+                  type="text"
+                  name="location"
+                  placeholder="e.g. Jaffna"
+                  maxlength="120"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Add Hospital
+            </button>
+          </form>
+
+          <form
+            class="add-card"
+            action="{{ url_for('add_medicine_route') }}"
+            method="POST"
+          >
+            <div class="add-card-head">
+              <span class="add-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.5 20.5 19 12a2.828 2.828 0 0 0-4-4l-8.5 8.5a4.243 4.243 0 0 0 6 6Z" />
+                  <path d="m16 8 3-3a2.828 2.828 0 0 1 4 4l-3 3" />
+                </svg>
+              </span>
+              <div>
+                <h3>Add Medicine</h3>
+                <p>Zero-stock records are created for every existing hospital.</p>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="medicineName">Medicine Name</label>
+                <input
+                  id="medicineName"
+                  type="text"
+                  name="name"
+                  placeholder="e.g. Vitamin C"
+                  maxlength="120"
+                  required
+                />
+              </div>
+
+              <div class="form-field">
+                <label for="medicineCategory">Category</label>
+                <input
+                  id="medicineCategory"
+                  type="text"
+                  name="category"
+                  placeholder="e.g. Supplement"
+                  maxlength="120"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Add Medicine
+            </button>
+          </form>
+        </div>
+      </dialog>
+
+      <!-- Floating + button -->
+      <button type="button" class="add-fab" data-add-trigger aria-label="Add hospital or medicine">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
 
       <!-- Dashboard Summary -->
       <section class="summary" id="summary">
@@ -509,8 +657,42 @@
     }
   }
 
+  // Add popup (+ button) behaviour
+  const addModal = document.getElementById("addModal");
+
+  function openAddModal() {
+    if (addModal && !addModal.open) {
+      addModal.showModal();
+    }
+  }
+
+  document.querySelectorAll("[data-add-trigger]").forEach((trigger) => {
+    trigger.addEventListener("click", openAddModal);
+  });
+
+  const closeAddButton = document.querySelector("[data-close-add]");
+  if (closeAddButton) {
+    closeAddButton.addEventListener("click", () => addModal.close());
+  }
+
+  if (addModal) {
+    // Clicking the dark backdrop also closes the popup
+    addModal.addEventListener("click", (event) => {
+      if (event.target === addModal) {
+        addModal.close();
+      }
+    });
+  }
+
+  // Reopen the popup after a failed submission, or from the search page link
+  const query = new URLSearchParams(window.location.search);
+  if (query.has("open_add") || query.get("add_success") === "0") {
+    openAddModal();
+  }
+
   // Highlight the navigation link for the section currently in view
-  const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+  // (only anchors have section hrefs — the Add button opens a popup instead)
+  const navLinks = Array.from(document.querySelectorAll("a.nav-link"));
   const navSections = navLinks
     .map((link) => document.querySelector(link.getAttribute("href")))
     .filter(Boolean);

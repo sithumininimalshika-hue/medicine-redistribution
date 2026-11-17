@@ -17,6 +17,107 @@ MEDICINE_DB_PATH = os.environ.get("MEDICINE_DB_PATH", str(_DEFAULT_MED_DB))
 app = Flask(__name__)
 
 
+def _get_catalog_counts():
+    """Read live hospital and medicine counts from the database."""
+
+    connection = sqlite3.connect(MEDICINE_DB_PATH)
+
+    try:
+        cursor = connection.cursor()
+
+        total_hospitals = cursor.execute(
+            "SELECT COUNT(*) FROM hospitals"
+        ).fetchone()[0]
+
+        total_medicines = cursor.execute(
+            "SELECT COUNT(*) FROM medicines"
+        ).fetchone()[0]
+
+    finally:
+        connection.close()
+
+    return total_hospitals, total_medicines
+
+
+def _add_catalog_record(
+    table,
+    detail_column,
+    other_table,
+    fk_column,
+    name,
+    detail,
+    label
+):
+    """
+    Insert a hospital or medicine, then seed zero-stock inventory rows so the
+    new record appears in stock analysis right away.
+
+    Table/column names come from the calling route's internal constants —
+    never from user input — so they are safe to concatenate into SQL. All
+    user-provided values still use parameterized queries.
+    """
+
+    connection = sqlite3.connect(MEDICINE_DB_PATH)
+
+    try:
+        cursor = connection.cursor()
+
+        # The schema has no UNIQUE constraint, so reject duplicates here.
+        duplicate = cursor.execute(
+            "SELECT 1 FROM " + table + " WHERE LOWER(name) = LOWER(?)",
+            (name,)
+        ).fetchone()
+
+        if duplicate:
+            return False, f'{label} "{name}" already exists.'
+
+        cursor.execute(
+            "INSERT INTO " + table + " (name, " + detail_column + ") "
+            "VALUES (?, ?)",
+            (name, detail)
+        )
+        record_id = cursor.lastrowid
+
+        other_ids = [
+            row[0]
+            for row in cursor.execute(
+                "SELECT id FROM " + other_table + " ORDER BY id"
+            )
+        ]
+
+        if fk_column == "hospital_id":
+            inventory_rows = [
+                (record_id, other_id) for other_id in other_ids
+            ]
+        else:
+            inventory_rows = [
+                (other_id, record_id) for other_id in other_ids
+            ]
+
+        cursor.executemany(
+            """
+            INSERT INTO inventory
+                (hospital_id, medicine_id, quantity, daily_usage, expiry_date)
+            VALUES (?, ?, 0, 0, NULL)
+            """,
+            inventory_rows
+        )
+
+        connection.commit()
+
+    except sqlite3.Error as error:
+        connection.rollback()
+        return False, "Could not add " + label.lower() + ": " + str(error)
+
+    finally:
+        connection.close()
+
+    return True, (
+        f'{label} "{name}" added with '
+        f'{len(other_ids)} inventory records.'
+    )
+
+
 @app.route("/")
 def home():
 
@@ -44,9 +145,8 @@ def home():
     consumption_data = analyze_consumption()
     expiry_data = analyze_expiry()
 
-    # Dashboard statistics
-    total_hospitals = 3
-    total_medicines = 5
+    # Dashboard statistics (live counts, so additions show up immediately)
+    total_hospitals, total_medicines = _get_catalog_counts()
 
     critical_count = sum(
         1 for item in stock_data
@@ -162,6 +262,60 @@ def search_medicine():
         medicine_name=medicine_name,
         search_results=search_results
     )
+
+
+@app.route("/add-hospital", methods=["POST"])
+def add_hospital_route():
+
+    name = request.form.get("name", "").strip()
+    location = request.form.get("location", "").strip()
+
+    if not name or not location:
+        success = False
+        message = "Hospital name and location are required."
+    else:
+        success, message = _add_catalog_record(
+            "hospitals",
+            "location",
+            "medicines",
+            "hospital_id",
+            name,
+            location,
+            "Hospital"
+        )
+
+    return redirect(url_for(
+        "home",
+        add_message=message,
+        add_success=int(success)
+    ))
+
+
+@app.route("/add-medicine", methods=["POST"])
+def add_medicine_route():
+
+    name = request.form.get("name", "").strip()
+    category = request.form.get("category", "").strip()
+
+    if not name or not category:
+        success = False
+        message = "Medicine name and category are required."
+    else:
+        success, message = _add_catalog_record(
+            "medicines",
+            "category",
+            "hospitals",
+            "medicine_id",
+            name,
+            category,
+            "Medicine"
+        )
+
+    return redirect(url_for(
+        "home",
+        add_message=message,
+        add_success=int(success)
+    ))
 
 
 if __name__ == "__main__":
